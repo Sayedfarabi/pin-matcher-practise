@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input class="form-control" id="generate-display" type="text" value="">
+                    <button class="generate-btn" onclick="generatePinHandler()">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input class="form-control" id="number-display" type="text">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                              <div class="button" onclick="numberHandler(7)">7</div>
+                              <div class="button" onclick="numberHandler(8)">8</div>
+                              <div class="button" onclick="numberHandler(9)">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div class="button" onclick="numberHandler(4)">4</div>
+                              <div class="button" onclick="numberHandler(5)">5</div>
+                              <div class="button" onclick="numberHandler(6)">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div class="button" onclick="numberHandler(1)">1</div>
+                              <div class="button" onclick="numberHandler(2)">2</div>
+                              <div class="button" onclick="numberHandler(3)">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div class="button" onclick="lastClear()">&lt;</div>
+                                <div class="button" onclick="numberHandler(0)">0</div>
+                                <div class="button" onclick="clearHandler()">C</div>
+                            </div>
+                            <div>
+                                <button type="submit" class="submit-btn" id="submit-btn" onclick="submitHandler()">Submit</button>
+                                <p class="action-left"> <span id="trying-count">3</span> try left</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="notify-section">
+            <p class="notify" id="did-not-match">❌ Pin Didn't Match, Please try again</p>
+            <p class="notify" id="pin-matched">✅ Pin Matched... Secret door is opening for you</p>
+        </div>
+    </div>
+
+    <script>
+
+
+
+        function generatePinHandler(){
+         const randomNumber = (Math.floor(Math.random()*10000)+10000).toString().substring(1);
+         document.getElementById("generate-display").value = randomNumber;
+         
+        }
+
+        function numberHandler(value){
+            document.getElementById("number-display").value += value;
+        }
+
+        function clearHandler(){
+            document.getElementById("number-display").value = "";
+        }
+
+        function submitHandler(){
+            const generatePinEl = document.getElementById("generate-display").value;
+            const numberEl = document.getElementById("number-display").value;
+            if (generatePinEl == numberEl) {
+                document.getElementById("pin-matched").style.display = "block";
+                document.getElementById("did-not-match").style.display = "none";
+            } else {
+                document.getElementById("did-not-match").style.display = "block";
+                document.getElementById("pin-matched").style.display = "none";
+
+                const tryingCountEl = document.getElementById("trying-count").innerText;
+                let tryingCountNum = parseFloat(tryingCountEl);
+                 tryingCountNum -= 1 ;
+                if (tryingCountNum < 0){
+                    tryingCountNum = 0;
+                    document.getElementById("submit-btn").disabled = true;
+
+                }
+                let tryingCountNumEl = tryingCountNum.toString();
+                 document.getElementById("trying-count").innerText = tryingCountNumEl;
+
+            }
+    
+        }
+
+        function lastClear(){
+            const numberDisEl = document.getElementById("number-display").value;
+            const clearNumberDisEl = numberDisEl.slice(0, numberDisEl.length-1);
+            document.getElementById("number-display").value = clearNumberDisEl;
+
+        }
+       
+
+
+    </script>
+</body>
+</html>
